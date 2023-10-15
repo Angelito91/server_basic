@@ -1,5 +1,5 @@
 import http from 'http'
-import fs from 'fs'
+import url from 'url'
 
 //Obtenido PORT de las variables de entorno
 const PORT = process.env.PORT ?? 3000
@@ -8,34 +8,44 @@ const PORT = process.env.PORT ?? 3000
 const server = http.createServer()
 
 // escucha el evento request y devuelve un response
-server.on('request', (req, res) => {
-  if (req.url === '/about') {   
-    // Obteniendo el fichero about.html
-    const html = fs.readFileSync('about.html', 'utf-8')
+server.on('request',(req,res) => {
+    if(req.url === '/about'){
+        // creando el html
+        const html = '<h1 style="color:red; text-align:center; margin-top: 20px">About</h1>'
 
-    // Devolviendo el fichero contact.html
-    res.writeHead(200, { 'Content-Type': 'text/html' })
-    return res.end(html)
+        // enviando la respuesta
+        res.writeHead(200,{'Content-Type': 'text/html'})
+        return res.end(html)
 
-  } else if (req.url === '/contact') {
-    // Obteniendo el fichero contact.html
-    const html = fs.readFileSync('contact.html', 'utf-8')
+    } else if(req.url === '/contact'){
+        // creando el html
+        const html = '<h1 style="color:red; text-align:center; margin-top: 20px">Contact</h1>'
 
-    // Devolviendo el fichero contact.html
-    res.writeHead(200, { 'Content-Type': 'text/html' })
-    return res.end(html)
+        // enviando la respuesta
+        res.writeHead(200,{'Content-Type': 'text/html'})
+        return res.end(html)
 
-  } else {
-    // Devolviendo el fichero index.html
-    const html = fs.readFileSync('index.html', 'utf-8')
+    } else {
+        // obteniendo el parametro user
+        const parametro = url.parse(req.url,true)
+        let user = ''
+    
+        if(parametro.query.user){
+            user = parametro.query.user
+        } else {
+            user = 'Usuario'
+        }
 
-    // Devolviendo el fichero index.html
-    res.writeHead(200, { 'Content-Type': 'text/html' })
-    res.end(html)
-  }
+        // creando html
+        const html = `<h1 style="color:red; text-align:center; margin-top: 20px"> Hola ${user}, como estas? </h1>`
+        
+        // enviando la respuesta
+        res.writeHead(200,{'Content-Type': 'text/html'})
+        return res.end(html)
+    }
 })
 
 //Servidor escuchando
-server.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`)
+server.listen(PORT,() => {
+    console.log(`Server listening on http://localhost:${PORT}`)
 })
