@@ -3,3 +3,9 @@
 ### Script
 - Produccion:  `npm run start`
 - Desarrollo:  `npm run dev`
+
+#### URL
+- `/`
+- `/?user=[tu nombre]`
+- `/about`
+- `/contact`
